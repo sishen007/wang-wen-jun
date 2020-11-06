@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class SpyingTest {
 
     /**
-     * Spy：用于部分方法的 Mock(模拟)
+     * Spy：用于部分方法的 Mock(模拟),其他方法调取真实方法
      */
     @Test
     public void testSpy() {
@@ -37,6 +37,7 @@ public class SpyingTest {
         Mockito.when(list.isEmpty()).thenReturn(true);
         Mockito.when(list.size()).thenReturn(0);
 
+        // get方法真实方法,isEmpty() 和 size() 是假的方法
         assertThat(list.get(0), equalTo("Mockito"));
         assertThat(list.get(1), equalTo("PowerMock"));
         assertThat(list.isEmpty(), equalTo(true));

@@ -8,13 +8,13 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.*;
 
 /**
  * @description: Stubbing语法
@@ -24,7 +24,7 @@ import static org.mockito.Matchers.anyInt;
 @RunWith(MockitoJUnitRunner.class)
 public class StubbingTest {
 
-    private List<String> list;
+    private ArrayList list;
 
     @Before
     public void init() {
@@ -33,6 +33,7 @@ public class StubbingTest {
 
     @After
     public void destory() {
+        // 重置mock中的stubbing
         Mockito.reset(this.list);
     }
 
@@ -41,10 +42,10 @@ public class StubbingTest {
      */
     @Test
     public void howToUseStubbing() {
-        Mockito.when(list.get(0)).thenReturn("first");
+        when(list.get(0)).thenReturn("first");
         assertThat(list.get(0), equalTo("first"));
 
-        Mockito.when(list.get(anyInt())).thenThrow(new RuntimeException());
+        when(list.get(anyInt())).thenThrow(new RuntimeException());
         try {
             list.get(0);
             fail();
@@ -60,8 +61,10 @@ public class StubbingTest {
     public void howToStubbingVoidMethod() {
         Mockito.doNothing().when(list).clear();
         list.clear();
-        Mockito.verify(list, Mockito.times(1)).clear();
+        // 等价 //Mockito.verify(list, Mockito.times(1)).clear();  times指定调用几次,如果调用超过指定，则抛出异常
+        verify(list, times(1)).clear();
 
+        // 当执行clear方法时候抛出异常
         Mockito.doThrow(RuntimeException.class).when(list).clear();
         try {
             list.clear();
@@ -74,7 +77,7 @@ public class StubbingTest {
     @Test
     public void stubbingDoReturn() {
         // 等价
-        Mockito.when(list.get(0)).thenReturn("first");
+        when(list.get(0)).thenReturn("first");
         Mockito.doReturn("second").when(list).get(1);
 
         assertThat(list.get(0), equalTo("first"));
@@ -86,7 +89,7 @@ public class StubbingTest {
      */
     @Test
     public void iterateStubbing() {
-        Mockito.when(list.size()).thenReturn(1, 2, 3, 4);
+        when(list.size()).thenReturn(1, 2, 3, 4);
         // Mockito.when(list.size()).thenReturn(1).thenReturn(2).thenReturn(3).thenReturn(4);
         assertThat(list.size(), equalTo(1));
         assertThat(list.size(), equalTo(2));
@@ -94,21 +97,24 @@ public class StubbingTest {
         assertThat(list.size(), equalTo(4));
     }
 
+    // 意义: 动态对传入的参数进行操作
     @Test
     public void stubbingWithAnswer() {
-        Mockito.when(list.get(anyInt())).thenAnswer(invocationOnMock -> {
+        when(list.get(anyInt())).thenAnswer(invocationOnMock -> {
             Integer index = invocationOnMock.getArgumentAt(0, Integer.class);
             return String.valueOf(index * 10);
         });
         assertThat(list.get(0), equalTo("0"));
-        assertThat(list.get(99), equalTo("990"));
+        assertThat(list.get(999), equalTo("9990"));
     }
 
     @Test
     public void stubbingWithRealCall() {
         StubbingService stubbingService = Mockito.mock(StubbingService.class);
-        Mockito.when(stubbingService.getS()).thenReturn("String");
-        Mockito.when(stubbingService.getI()).thenCallRealMethod();
+        when(stubbingService.getS()).thenReturn("String");
+        when(stubbingService.getI()).thenCallRealMethod();
+
+
 
         assertThat(stubbingService.getS(), equalTo("String"));
         assertThat(stubbingService.getI(), equalTo(10));

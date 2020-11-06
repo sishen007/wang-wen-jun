@@ -33,15 +33,15 @@ public class DeepMockTest {
 
     @Test
     public void testMock() {
-        Lesson03 l03 = lesson03Service.get();
-        l03.foo();
+        Lesson03 l03 = lesson03Service.get(); //没有指定桩,则返回null
+        l03.foo(); // 报NPE
     }
 
     @Test
     public void testDeepMock() {
-        Mockito.when(lesson03Service.get()).thenReturn(lesson03);
-        Lesson03 l03 = lesson03Service.get();
-        l03.foo();
+        Mockito.when(lesson03Service.get()).thenReturn(lesson03); // 指定桩
+        Lesson03 l03 = lesson03Service.get(); // 获取mock对象 l03
+        l03.foo(); // 继续掉foo返回null
     }
 
     @Test

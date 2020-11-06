@@ -2,7 +2,6 @@ package com.wang.mockito.lesson06;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
@@ -11,6 +10,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * @description: Spying Demo
@@ -24,7 +24,7 @@ public class SpyingAnnotationTest {
 
     @Before
     public void init() {
-        MockitoAnnotations.initMocks(SpyingAnnotationTest.class);
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -36,9 +36,9 @@ public class SpyingAnnotationTest {
         assertThat(list.isEmpty(), equalTo(false));
 
         // Stubbing 语法 模拟 list 的返回内容
-        Mockito.when(list.isEmpty()).thenReturn(true);
-        Mockito.when(list.size()).thenReturn(0);
-
+        when(list.isEmpty()).thenReturn(true);
+        when(list.size()).thenReturn(0);
+//
         assertThat(list.get(0), equalTo("Mockito"));
         assertThat(list.get(1), equalTo("PowerMock"));
         assertThat(list.isEmpty(), equalTo(true));

@@ -10,6 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import static org.mockito.Matchers.anyString;
+
 /**
  * @description: Rule方式 进行Mock
  * @author: wei·man cui
@@ -20,7 +22,8 @@ public class MockByRuleTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    @Mock(answer = Answers.CALLS_REAL_METHODS)
+    //    @Mock(answer = Answers.CALLS_REAL_METHODS) // 调用真是方法
+    @Mock(answer = Answers.RETURNS_SMART_NULLS)
     private AccountDao accountDao;
 
     @Test
@@ -29,5 +32,14 @@ public class MockByRuleTest {
         Account account = accountDao.findAccount("x", "y");
         System.out.println(account);
     }
+
+    @Test
+    public void tetMockStub() {
+        // 测试打桩
+        Mockito.when(accountDao.findAccount(anyString(), anyString())).thenReturn(null);
+        Account account = accountDao.findAccount("x", "y");
+        System.out.println(account);
+    }
+
 
 }

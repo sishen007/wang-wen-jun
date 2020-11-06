@@ -7,7 +7,7 @@
  * </ul>
  *
  * @description: package-info
- * @author: wei·man cui
- * @date: 2020/8/13 11:07
+ * @author wangyh2
+ * @since 2020/11/6 10:56
  */
 package com.wang.mockito.lesson03;

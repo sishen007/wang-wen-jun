@@ -21,13 +21,13 @@ public class AccountLoginController {
         try {
             Account account = accountDao.findAccount(userName, password);
             if (account == null) {
-                return "login";
+                return "/login";
             } else {
-                return "index";
+                return "/index";
             }
         } catch (Exception e) {
             // DB 不可用了
-            return "505";
+            return "/505";
         }
     }
 
