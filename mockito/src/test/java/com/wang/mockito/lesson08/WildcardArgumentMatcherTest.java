@@ -13,6 +13,8 @@ import java.util.Collections;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -33,7 +35,7 @@ public class WildcardArgumentMatcherTest {
 
     @Test
     public void wildCardMethod1() {
-        Mockito.when(simpleService.method1(anyInt(), anyString(), anyCollection(), isA(Serializable.class)))
+        when(simpleService.method1(anyInt(), anyString(), anyCollection(), isA(Serializable.class)))
                 .thenReturn(100);
         int result = simpleService.method1(1, "Sun", Collections.emptySet(), "Mockito");
         assertThat(result, equalTo(100));
@@ -44,10 +46,10 @@ public class WildcardArgumentMatcherTest {
      */
     @Test
     public void wildCardMethodWithSpecial() {
-        Mockito.when(simpleService.method1(anyInt(), anyString(), anyCollection(), isA(Serializable.class))).thenReturn(-1);
-        Mockito.when(simpleService.method1(anyInt(), eq("Jack"), anyCollection(), isA(Serializable.class))).thenReturn(100);
-        Mockito.when(simpleService.method1(anyInt(), eq("Rose"), anyCollection(), isA(Serializable.class))).thenReturn(200);
-        // 注意顺序，统配的 在最前，特殊的 在后面
+        when(simpleService.method1(anyInt(), anyString(), anyCollection(), isA(Serializable.class))).thenReturn(-1);
+        when(simpleService.method1(anyInt(), eq("Jack"), anyCollection(), isA(Serializable.class))).thenReturn(100);
+        when(simpleService.method1(anyInt(), eq("Rose"), anyCollection(), isA(Serializable.class))).thenReturn(200);
+        // 注意顺序，通配的 在最前，特殊的 在后面
         // Mockito.when(simpleService.method1(anyInt(), anyString(), anyCollection(), isA(Serializable.class))).thenReturn(-1);
         int result = simpleService.method1(1, "Jack", Collections.emptySet(), "Mockito");
         assertThat(result, equalTo(100));
@@ -62,7 +64,7 @@ public class WildcardArgumentMatcherTest {
         Mockito.doNothing().when(simpleService).method2(anyInt(), anyString(), anyCollection(), isA(Serializable.class));
 
         simpleService.method2(2, "Sun", Collections.emptyList(), "Mockito");
-        Mockito.verify(simpleService, Mockito.times(1))
+        verify(simpleService, Mockito.times(1))
                 .method2(anyInt(), eq("Sun"), anyCollection(), isA(Serializable.class));
     }
 

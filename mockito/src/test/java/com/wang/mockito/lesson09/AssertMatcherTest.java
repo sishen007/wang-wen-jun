@@ -43,7 +43,8 @@ public class AssertMatcherTest {
     @Test
     public void test3() {
         double price = 23.45;
-        assertThat("NotMatch", price, equalTo(23.4));
+//        assertThat("NotMatch", price, equalTo(23.4));
+        assertThat(price,either(equalTo(23.52)).or(equalTo(23.54)));
     }
 
 }

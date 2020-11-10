@@ -7,10 +7,14 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 /**
  * @description: Arguments Matchers
@@ -22,18 +26,24 @@ public class ArgumentsMatcherTest {
 
     @Test
     public void basicTest() {
-        List<Integer> list = Mockito.mock(ArrayList.class);
-        Mockito.when(list.get(0)).thenReturn(100);
+        List<Integer> list = mock(ArrayList.class);
+        // 等价 when(list.get(eq(0))).thenReturn(100);
+        when(list.get(0)).thenReturn(100);
         assertThat(list.get(0), equalTo(100));
-        assertThat(list.get(1), CoreMatchers.nullValue());
+        assertThat(list.get(1), nullValue());
     }
 
-    /* isA, any 的不同 */
+    /*
+    isA, any 的不同
+    isA 必须是自类或当前类
+    any 可以是同一个父类下
+    eq 基本类型
+    */
     @Test
     public void testComplex() {
-        Foo foo = Mockito.mock(Foo.class);
+        Foo foo = mock(Foo.class);
         // Mockito.when(foo.function(Mockito.isA(Parent.class))).thenReturn(100);
-        Mockito.when(foo.function(Mockito.isA(Child1.class))).thenReturn(100);
+        when(foo.function(Mockito.isA(Child1.class))).thenReturn(100);
         int result = foo.function(new Child1());
         assertThat(result, equalTo(100));
 
@@ -42,7 +52,7 @@ public class ArgumentsMatcherTest {
 
         Mockito.reset(foo);
 
-        Mockito.when(foo.function(Mockito.any(Child1.class))).thenReturn(100);
+        when(foo.function(Mockito.any(Child1.class))).thenReturn(100);
         result = foo.function(new Child2());
         assertThat(result, equalTo(100));
     }
@@ -69,5 +79,26 @@ public class ArgumentsMatcherTest {
         public int work() {
             throw new RuntimeException();
         }
+    }
+
+
+
+    @Test
+    public void argumentMatchers(){
+        LinkedList mockedList = mock(LinkedList.class);
+        //stubbing using built-in anyInt() argument matcher
+        when(mockedList.get(anyInt())).thenReturn("element");
+
+        //stubbing using custom matcher (let's say isValid() returns your own matcher implementation):
+//        when(mockedList.contains(argThat(isValid()))).thenReturn(true);
+
+        //following prints "element"
+        System.out.println(mockedList.get(999));
+
+        //you can also verify using an argument matcher
+        verify(mockedList).get(anyInt());
+
+        //argument matchers can also be written as Java 8 Lambdas
+//        verify(mockedList).add(argThat(someString -> someString.length() > 5));
     }
 }

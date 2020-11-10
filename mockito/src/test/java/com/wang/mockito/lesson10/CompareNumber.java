@@ -67,27 +67,27 @@ public class CompareNumber<T extends Number> extends BaseMatcher<T> {
      * @param <T>
      */
     private static class DefaultNumberCompare<T extends Number> implements Compare<T> {
-        private final boolean greate;
+        private final boolean great;
 
         private DefaultNumberCompare(boolean greate) {
-            this.greate = greate;
+            this.great = greate;
         }
 
         @Override
         public boolean compare(T expected, T actual) {
             Class<?> clazz = actual.getClass();
             if (clazz == Integer.class) {
-                return greate ? (Integer) actual > (Integer) expected : (Integer) actual < (Integer) expected;
+                return great ? (Integer) actual > (Integer) expected : (Integer) actual < (Integer) expected;
             } else if (clazz == Short.class) {
-                return greate ? (Short) actual > (Short) expected : (Short) actual < (Short) expected;
+                return great ? (Short) actual > (Short) expected : (Short) actual < (Short) expected;
             } else if (clazz == Byte.class) {
-                return greate ? (Byte) actual > (Byte) expected : (Byte) actual < (Byte) expected;
+                return great ? (Byte) actual > (Byte) expected : (Byte) actual < (Byte) expected;
             } else if (clazz == Double.class) {
-                return greate ? (Double) actual > (Double) expected : (Double) actual < (Double) expected;
+                return great ? (Double) actual > (Double) expected : (Double) actual < (Double) expected;
             } else if (clazz == Float.class) {
-                return greate ? (Float) actual > (Float) expected : (Float) actual < (Float) expected;
+                return great ? (Float) actual > (Float) expected : (Float) actual < (Float) expected;
             } else if (clazz == Long.class) {
-                return greate ? (Long) actual > (Long) expected : (Long) actual < (Long) expected;
+                return great ? (Long) actual > (Long) expected : (Long) actual < (Long) expected;
             } else {
                 throw new AssertionError("The number type " + clazz + " not support.");
             }
